@@ -6,12 +6,9 @@
   <title>Goo Treasure: Arcade Edition</title>
   <link rel="stylesheet" href="style.css">
   <link rel="apple-touch-icon" href="icon.png">
-  <!-- Launch full-screen without Safari address/bottom bars -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <!-- Style the top status bar (battery/time) -->
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <!-- App name under the Home Screen icon -->
   <meta name="apple-mobile-web-app-title" content="zGoo Arcade">
 </head>
 <body>
@@ -35,16 +32,27 @@
     </div>
   </div>
 
-  <div id="gameOver" class="hidden">
+  <div id="startScreen" class="modal">
+    <h1>GOO TREASURE</h1>
+    <ul class="instructions">
+      <li>Scrub the goo to uncover hidden coins &amp; cyan <strong>+10s</strong> clocks.</li>
+      <li>Let <strong>AI Baylee</strong> gather loose coins for you.</li>
+      <li>Tap <strong>Baylee 3x</strong> to redeliver your treasure +1000 pts!</li>
+      <li>Watch out for red <strong>Goo Bombs</strong> (-200 pts).</li>
+    </ul>
+    <button id="startBtn" class="primary-btn">Start Game</button>
+  </div>
+
+  <div id="gameOver" class="modal hidden">
     <h1>TIME'S UP!</h1>
     <p>Final Score: <span id="finalScore">0</span></p>
     <p>High Score: <span id="finalBest">0</span></p>
-    <button id="playAgainBtn">Play Again</button>
+    <button id="playAgainBtn" class="primary-btn">Play Again</button>
   </div>
 
   <div id="liquid"><canvas id="bCanvas"></canvas></div>
   <canvas id="cCanvas"></canvas>
-  <div id="hint">SCRUB GOO TO FREE COINS &bull; CATCH CYAN +10s CLOCK COINS &bull; TAP PURPLE BAILEE 3X</div>
+  <div id="hint">SCRUB GOO TO FIND COINS &bull; LET BAYLEE GATHER &bull; TAP BAYLEE 3X TO REDELIVER</div>
 
   <script src="game.js"></script>
 </body>
