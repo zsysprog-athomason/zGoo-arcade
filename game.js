@@ -236,7 +236,7 @@ class Rival {
     cCtx.lineWidth = 3; cCtx.strokeStyle = '#ea80fc'; cCtx.stroke();
     if (this.free) {
       cCtx.fillStyle = '#fff'; cCtx.font = 'bold 11px sans-serif';
-      cCtx.textAlign = 'center'; cCtx.textBaseline = 'middle'; cCtx.fillText(`HP:${this.hp}`, this.x, this.y);
+      cCtx.textAlign = 'center'; cCtx.textBaseline = 'middle'; cCtx.fillText(`BAY:${this.hp}`, this.x, this.y);
     }
     cCtx.restore();
   }
