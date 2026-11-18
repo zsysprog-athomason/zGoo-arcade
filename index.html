@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Goo Treasure: Arcade Edition</title>
   <link rel="stylesheet" href="style.css">
   <link rel="apple-touch-icon" href="icon.png">
@@ -13,9 +13,6 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <!-- App name under the Home Screen icon -->
   <meta name="apple-mobile-web-app-title" content="zGoo Arcade">
-  <!-- Prevent accidental pinch-zooming while tapping game controls -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-
 </head>
 <body>
   <div id="hud">
@@ -29,10 +26,10 @@
   <div id="panel">
     <div class="head"><span>CONTROLS</span><button id="toggle">Hide</button></div>
     <div class="body">
-      <div><div class="row"><span>Whittle Speed</span><span id="vWhit">1.2</span></div><input type="range" id="sWhit" min="0.3" max="3.0" step="0.1" value="1.2"></div>
+      <div><div class="row"><span>Whittle Speed</span><span id="vWhit">0.3</span></div><input type="range" id="sWhit" min="0.3" max="3.0" step="0.1" value="0.3"></div>
       <div><div class="row"><span>Escape Speed</span><span id="vSpd">1.0</span></div><input type="range" id="sSpd" min="0.3" max="2.5" step="0.1" value="1.0"></div>
       <div><div class="row"><span>Push Force</span><span id="vPush">0.8</span></div><input type="range" id="sPush" min="0.0" max="2.5" step="0.1" value="0.8"></div>
-      <div><div class="row"><span>Goo Blur</span><span id="vBlur">18</span></div><input type="range" id="sBlur" min="6" max="32" value="18"></div>
+      <div><div class="row"><span>Goo Blur</span><span id="vBlur">6</span></div><input type="range" id="sBlur" min="6" max="32" value="6"></div>
       <button id="muteBtn">Sound: ON</button>
       <button id="resetBtn">Restart Run</button>
     </div>

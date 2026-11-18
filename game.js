@@ -29,7 +29,7 @@ const sfx = {
   steal: () => playTone(220, 'sawtooth', 0.2, 0.12, 110)
 };
 
-const cfg = { whit: 1.2, spd: 1.0, push: 0.8, blur: 18 };
+const cfg = { whit: 0.3, spd: 1.0, push: 0.8, blur: 6 };
 const panel = document.getElementById('panel');
 panel.onmousedown = e => e.stopPropagation();
 panel.ontouchstart = e => e.stopPropagation();
@@ -58,6 +58,12 @@ bind('sSpd', 'spd', 'vSpd');
 bind('sPush', 'push', 'vPush');
 bind('sBlur', 'blur', 'vBlur', () => liq.style.filter = `blur(${cfg.blur}px) contrast(32)`);
 
+document.getElementById('sWhit').value = cfg.whit;
+document.getElementById('vWhit').textContent = cfg.whit;
+document.getElementById('sBlur').value = cfg.blur;
+document.getElementById('vBlur').textContent = cfg.blur;
+liq.style.filter = `blur(${cfg.blur}px) contrast(32)`;
+
 let score = 0, best = parseInt(localStorage.getItem('gooBest') || '0');
 let escaped = 0, timeLeft = 90, active = true, hue = 0, mx = -1000, my = -1000;
 let combo = 1, lastCatchTime = 0, popCooldown = 0;
@@ -82,7 +88,6 @@ function updateHUD() {
     document.getElementById('bestVal').textContent = best;
   }
 }
-
 class Blob {
   constructor(x, y, r) {
     this.x = x; this.y = y;
@@ -121,6 +126,7 @@ function getCover(x, y) {
   }
   return cover;
 }
+
 class Coin {
   constructor(host, forcedTier) {
     const roll = Math.random();
@@ -235,7 +241,6 @@ class Rival {
     cCtx.restore();
   }
 }
-
 function spawnWave() {
   hue = (hue + 75) % 360; const waveBlobs = [];
   const marginX = Math.min(140, w * 0.18), marginY = Math.min(140, h * 0.18);
@@ -246,7 +251,9 @@ function spawnWave() {
   coins.push(new Coin(waveBlobs[0], TIERS[3]));
   for (let i = 1; i < 6; i++) coins.push(new Coin(waveBlobs[i]));
   bombs.push(new Bomb(waveBlobs[6]));
-  rivals.push(new Rival(waveBlobs[7]));
+  if (rivals.length === 0) {
+    rivals.push(new Rival(waveBlobs[7]));
+  }
 }
 
 function resetGame() {
