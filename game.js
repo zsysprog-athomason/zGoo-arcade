@@ -33,6 +33,9 @@ const cfg = { whit: 0.3, spd: 1.0, push: 0.8, blur: 6 };
 const panel = document.getElementById('panel');
 panel.onmousedown = e => e.stopPropagation();
 panel.ontouchstart = e => e.stopPropagation();
+document.getElementById('startScreen').ontouchstart = e => e.stopPropagation();
+document.getElementById('gameOver').ontouchstart = e => e.stopPropagation();
+
 document.getElementById('toggle').onclick = e => {
   panel.classList.toggle('min');
   e.target.textContent = panel.classList.contains('min') ? 'Show' : 'Hide';
@@ -133,7 +136,7 @@ function getCover(x, y) {
 class Coin {
   constructor(host, forcedTier) {
     const roll = Math.random();
-    this.tier = forcedTier || (roll < 0.5 ? TIERS : (roll < 0.85 ? TIERS : TIERS));
+    this.tier = forcedTier || (roll < 0.5 ? TIERS.at(0) : (roll < 0.85 ? TIERS.at(1) : TIERS.at(2)));
     this.host = host; this.x = host ? host.x : w / 2; this.y = host ? host.y : h / 2;
     this.vx = 0; this.vy = 0; this.free = !host; this.pulse = Math.random() * 6.28;
     if (this.free) this.launch();
@@ -168,7 +171,7 @@ class Coin {
   draw() {
     const r = this.tier.r + (this.free ? Math.sin(this.pulse) * 2 : 0);
     cCtx.save();
-    if (!this.free) { cCtx.globalAlpha = 0.45; cCtx.setLineDash(); }
+    if (!this.free) { cCtx.globalAlpha = 0.45; cCtx.setLineDash([4, 4]); }
     else { cCtx.shadowColor = this.tier.color; cCtx.shadowBlur = 14; }
     cCtx.beginPath(); cCtx.arc(this.x, this.y, r, 0, 6.28);
     cCtx.fillStyle = this.tier.color; cCtx.fill();
@@ -254,11 +257,11 @@ function spawnWave() {
     const bx = marginX + Math.random() * (w - marginX * 2), by = marginY + Math.random() * (h - marginY * 2);
     const b = new Blob(bx, by, 52 + Math.random() * 28); blobs.push(b); waveBlobs.push(b);
   }
-  coins.push(new Coin(waveBlobs, TIERS));
-  for (let i = 1; i < 6; i++) coins.push(new Coin(waveBlobs[i]));
-  bombs.push(new Bomb(waveBlobs));
+  coins.push(new Coin(waveBlobs.at(0), TIERS.at(3)));
+  for (let i = 1; i < 6; i++) coins.push(new Coin(waveBlobs.at(i)));
+  bombs.push(new Bomb(waveBlobs.at(6)));
   if (rivals.length === 0) {
-    rivals.push(new Rival(waveBlobs));
+    rivals.push(new Rival(waveBlobs.at(7)));
   }
 }
 
@@ -281,7 +284,7 @@ function resetGame() {
 function handleTap(x, y) {
   if (!active) return;
   for (let i = rivals.length - 1; i >= 0; i--) {
-    const r = rivals[i];
+    const r = rivals.at(i);
     if (r.free && Math.hypot(x - r.x, y - r.y) <= r.r + 22) {
       r.hp--; r.stun = 25;
       if (r.hp <= 0) {
@@ -300,7 +303,7 @@ function handleTap(x, y) {
     }
   }
   for (let i = coins.length - 1; i >= 0; i--) {
-    const c = coins[i];
+    const c = coins.at(i);
     if (c.free && Math.hypot(x - c.x, y - c.y) <= c.tier.r + 24) {
       const now = performance.now();
       combo = (now - lastCatchTime < 1800) ? Math.min(8, combo + 1) : 1;
@@ -329,13 +332,13 @@ onmousedown = e => handleTap(e.clientX, e.clientY);
 // Mobile Touch Events
 ontouchstart = e => {
   if (!active) return;
-  const t = e.touches;
+  const t = e.touches.item(0);
   mx = t.clientX; my = t.clientY;
   handleTap(t.clientX, t.clientY);
 };
 ontouchmove = e => {
   if (!active) return;
-  const t = e.touches;
+  const t = e.touches.item(0);
   mx = t.clientX; my = t.clientY;
 };
 ontouchend = () => { mx = -1000; my = -1000; };
@@ -358,18 +361,18 @@ showStartScreen();
   bCtx.clearRect(0, 0, w, h); cCtx.clearRect(0, 0, w, h);
   if (active && coins.length === 0) spawnWave();
   for (let i = blobs.length - 1; i >= 0; i--) {
-    blobs[i].step(); blobs[i].draw(); if (blobs[i].r <= 6) blobs.splice(i, 1);
+    blobs.at(i).step(); blobs.at(i).draw(); if (blobs.at(i).r <= 6) blobs.splice(i, 1);
   }
-  for (let i = bombs.length - 1; i >= 0; i--) { if (bombs[i].step()) bombs.splice(i, 1); else bombs[i].draw(); }
-  for (let i = rivals.length - 1; i >= 0; i--) { rivals[i].step(); rivals[i].draw(); }
+  for (let i = bombs.length - 1; i >= 0; i--) { if (bombs.at(i).step()) bombs.splice(i, 1); else bombs.at(i).draw(); }
+  for (let i = rivals.length - 1; i >= 0; i--) { rivals.at(i).step(); rivals.at(i).draw(); }
   for (let i = coins.length - 1; i >= 0; i--) {
-    const c = coins[i]; c.step(); c.draw();
+    const c = coins.at(i); c.step(); c.draw();
     if (c.free && (c.x < -15 || c.x > w + 15 || c.y < -15 || c.y > h + 15)) {
       escaped++; combo = 1; updateHUD(); coins.splice(i, 1);
     }
   }
   for (let i = popups.length - 1; i >= 0; i--) {
-    const p = popups[i];
+    const p = popups.at(i);
     cCtx.save();
     cCtx.font = 'bold 18px sans-serif';
     cCtx.textAlign = 'center';
