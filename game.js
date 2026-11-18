@@ -224,7 +224,7 @@ class Rival {
       const c = coins[i];
       if (c.free && Math.hypot(c.x - this.x, c.y - this.y) < this.r + c.tier.r) {
         sfx.steal(); this.loot.push(c.tier); this.r += 2; escaped++; updateHUD();
-        addPopup(this.x, this.y, 'STOLEN!', '#d500f9'); coins.splice(i, 1);
+        addPopup(this.x, this.y, 'GOT IT!', '#d500f9'); coins.splice(i, 1);
       }
     }
   }
